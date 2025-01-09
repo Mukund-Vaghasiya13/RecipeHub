@@ -9,4 +9,7 @@ import retrofit2.http.POST
 interface ApiInterface {
     @POST("api/v1/User/login")
     fun login(@Body param:Map<String,String>): Call<ResponseBody>
+
+    @POST("api/v1/User/register")
+    fun Signup(@Body param:Map<String,String>): Call<ResponseBody>
 }
