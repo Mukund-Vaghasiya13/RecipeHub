@@ -93,13 +93,13 @@ class SignupScreen : AppCompatActivity() {
                         Toast.makeText(applicationContext, "Sorry, something went wrong. Please try again later.", Toast.LENGTH_LONG).show()
                     }
                 }else{
-                    // Handle Server other Status Code Error
+                    // Handle Server other Status Code MYError
                     Toast.makeText(applicationContext,statusCode.toString(),Toast.LENGTH_LONG).show()
                 }
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Toast.makeText(applicationContext, "Error: ${t.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(applicationContext, "MYError: ${t.message}", Toast.LENGTH_LONG).show()
             }
         })
     }
