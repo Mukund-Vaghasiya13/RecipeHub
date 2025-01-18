@@ -1,15 +1,14 @@
 package com.example.recipehub
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,6 +28,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 
 class HomeScreen : AppCompatActivity() {
+    private var currentPage = 1
+    private var isLoading = false
+    private val recipes = mutableListOf<Recipe>()
+    private lateinit var myAdapter: ListRecipeAdapter
+    private lateinit var progressBar: ProgressBar
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,27 +44,51 @@ class HomeScreen : AppCompatActivity() {
         setSupportActionBar(homeAppbar)
         val recycler = findViewById<RecyclerView>(R.id.recycler)
         val errorMessageView = findViewById<TextView>(R.id.error_message)
-        NetworkCallListRecipe(1) { list, message ->
-            if (message != null) {
-                recycler.visibility = View.GONE
-                errorMessageView.visibility = View.VISIBLE
-                errorMessageView.text = "Error: $message"
-            } else if (list != null) {
-                recycler.visibility = View.VISIBLE
-                errorMessageView.visibility = View.GONE
-                Log.d("HomeScreen", "Fetched ${list.size} recipes.")
+        progressBar = findViewById(R.id.progressBar)
 
-                val myAdapter = ListRecipeAdapter(this, list)
-                recycler.adapter = myAdapter
-                recycler.layoutManager = LinearLayoutManager(this)
-            } else {
-                Log.e("HomeScreen", "Failed to fetch recipes.")
-                recycler.visibility = View.GONE
-                errorMessageView.visibility = View.VISIBLE
-                errorMessageView.text = "Failed to fetch recipes."
+        myAdapter = ListRecipeAdapter(this, recipes)
+        recycler.adapter = myAdapter
+        recycler.layoutManager = LinearLayoutManager(this)
+
+        loadRecipes(currentPage)
+
+        recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val totalItemCount = layoutManager.itemCount
+                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+
+                if (!isLoading && lastVisibleItemPosition == totalItemCount - 1) {
+                    currentPage++
+                    loadRecipes(currentPage)
+                }
+            }
+        })
+    }
+
+    private fun loadRecipes(page: Int) {
+        progressBar.visibility = View.VISIBLE
+        isLoading = true
+        NetworkCallListRecipe(page) { list, message ->
+            progressBar.visibility = View.GONE
+            isLoading = false
+            if (message != null) {
+
+                    findViewById<RecyclerView>(R.id.recycler).visibility = View.GONE
+                    findViewById<TextView>(R.id.error_message).apply {
+                        visibility = View.VISIBLE
+                        text = "Error: $message"
+
+                }
+            } else if (list != null) {
+                recipes.addAll(list)
+                myAdapter.notifyDataSetChanged()
             }
         }
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.homemenu, menu)
