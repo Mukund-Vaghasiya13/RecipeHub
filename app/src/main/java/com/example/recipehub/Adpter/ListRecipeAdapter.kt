@@ -6,14 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipehub.R
 import com.example.recipehub.modle.Recipe
 import com.squareup.picasso.Picasso
 
-class ListRecipeAdapter(val Conent:Activity,val recipes: List<Recipe>) : RecyclerView.Adapter<ListRecipeAdapter.RecipeViewHolder>() {
+class ListRecipeAdapter(val Conent:Activity,val recipes: List<Recipe>,val getRecipe:(item:Recipe)->Unit) : RecyclerView.Adapter<ListRecipeAdapter.RecipeViewHolder>() {
 
     class RecipeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val card:CardView  = view.findViewById(R.id.card)
         val imageView: ImageView = view.findViewById(R.id.RecipeImage)
         val description: TextView = view.findViewById(R.id.description)
     }
@@ -38,5 +40,13 @@ class ListRecipeAdapter(val Conent:Activity,val recipes: List<Recipe>) : Recycle
            // Fallback image
             Picasso.get().load("https://miro.medium.com/v2/resize:fit:1400/1*MXyMqcEJ6Se0SCWcYCKZTQ.jpeg").into(holder.imageView)
         }
+
+        holder.card.setOnClickListener {
+            getRecipe(recipe)
+        }
+//
+//        holder.imageView.setOnClickListener{
+//            getRecipe(recipe)
+//        }
     }
 }

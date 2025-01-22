@@ -3,7 +3,6 @@ package com.example.recipehub
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -46,7 +45,14 @@ class HomeScreen : AppCompatActivity() {
         val errorMessageView = findViewById<TextView>(R.id.error_message)
         progressBar = findViewById(R.id.progressBar)
 
-        myAdapter = ListRecipeAdapter(this, recipes)
+        myAdapter = ListRecipeAdapter(this, recipes){ recipe ->
+            val intent = Intent(applicationContext,DetailViewActivity::class.java)
+            intent.putExtra("title",recipe.title)
+            intent.putExtra("description",recipe.description)
+            intent.putExtra("image",recipe.image)
+            intent.putExtra("ingredients",recipe.ingredients)
+            startActivity(intent)
+        }
         recycler.adapter = myAdapter
         recycler.layoutManager = LinearLayoutManager(this)
 
