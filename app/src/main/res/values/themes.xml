@@ -8,7 +8,8 @@
     <!-- Custom AppBar Title Text Appearance -->
     <style name="CustomAppBarTitleStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">30dp</item> <!-- Adjust the size as needed -->
+        <item name="android:textSize">30dp</item>
+        <item name="android:paddingTop">20dp</item><!-- Adjust the size as needed -->
         <item name="android:textColor">@android:color/black</item> <!-- Optional: Customize color -->
     </style>
 

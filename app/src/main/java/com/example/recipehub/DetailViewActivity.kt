@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.appbar.MaterialToolbar
@@ -26,6 +27,15 @@ class DetailViewActivity : AppCompatActivity() {
         val imageview= findViewById<ImageView>(R.id.imageView4)
         val url = intent.getStringExtra("image")
         Picasso.get().load(url).into(imageview)
+
+        val title = findViewById<TextView>(R.id.textView)
+        title.text = intent.getStringExtra("title")
+
+        val des = findViewById<TextView>(R.id.des)
+        des.text = intent.getStringExtra("description")
+
+        val ing = findViewById<TextView>(R.id.ing)
+        ing.text = intent.getStringExtra("ingredients")
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

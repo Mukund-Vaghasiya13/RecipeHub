@@ -28,10 +28,12 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginTop="36dp"
+        android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout4" />
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout4"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/textView"
@@ -68,6 +70,7 @@
         tools:ignore="MissingClass">
 
         <TextView
+            android:id="@+id/des"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="hjshas ahjahd ajhasjdh ahdjadhdadsjhdjadh ahdajhd dhajdhajdshdjdh jh j adhjahd"
@@ -76,7 +79,7 @@
 
 
     <TextView
-        android:id="@+id/ing"
+        android:id="@+id/ingredients"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="28dp"
@@ -94,10 +97,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.285"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ing"
+        app:layout_constraintTop_toBottomOf="@+id/ingredients"
         tools:ignore="MissingClass">
 
         <TextView
+            android:id="@+id/ing"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="hjshas ahjahd ajhasjdh ahdjadhdadsjhdjadh ahdajhd dhajdhajdshdjdh jh j adhjahd"
