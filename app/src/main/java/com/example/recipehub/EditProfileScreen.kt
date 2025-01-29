@@ -107,22 +107,19 @@ class EditProfileScreen : AppCompatActivity() {
         }
     }
 
-    private fun updateProfile(token: String?, imageUri: Uri?, username: String, email: String){
-
-        val Part  = if (imageUri != null){
-            val fileDir = applicationContext.filesDir
-            val file = File(fileDir,"image.jpeg")
+    private fun updateProfile(token: String?, imageUri: Uri?, username: String, email: String) {
+        val file: File? = if (imageUri != null) {
+            val fileDir = applicationContext.cacheDir
+            val tempFile = File(fileDir, "image.jpeg")
             val inputStream = contentResolver.openInputStream(imageUri)
-            val outputStrem = FileOutputStream(file)
-            inputStream!!.copyTo(outputStrem)
+            val outputStream = FileOutputStream(tempFile)
+            inputStream!!.copyTo(outputStream)
 
-            val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-            val part = MultipartBody.Part.createFormData("RecipyUserProfile",file.name,requestBody)
-            part
-        }else{
+            val requestBody = tempFile.asRequestBody("image/*".toMediaTypeOrNull())
+            tempFile // Store file reference for deletion later
+        } else {
             null
         }
-
 
         val retrofit = Retrofit.Builder()
             .baseUrl("https://sharerecipy-backend.onrender.com/") // Use your actual backend URL
@@ -131,25 +128,18 @@ class EditProfileScreen : AppCompatActivity() {
 
         val apiService = retrofit.create(ApiInterface::class.java)
 
-        // Create RequestBody for username and email
         val usernamePart = username.toRequestBody("text/plain".toMediaTypeOrNull())
         val emailPart = email.toRequestBody("text/plain".toMediaTypeOrNull())
 
-        // File handling for image
+        val authorization = "Bearer $token"
 
-
-        // Authorization header
-        val authorization = "Bearer $token"  // Bearer token format
-
-        // Make the API call to update profile
-        val call = apiService.updateProfile(authorization, Part, usernamePart, emailPart)
+        val call = apiService.updateProfile(authorization, file?.let { MultipartBody.Part.createFormData("RecipyUserProfile", it.name, it.asRequestBody("image/*".toMediaTypeOrNull())) }, usernamePart, emailPart)
         call.enqueue(object : retrofit2.Callback<User> {
             override fun onResponse(call: retrofit2.Call<User>, response: retrofit2.Response<User>) {
                 showLoading(false)
                 if (response.isSuccessful) {
                     val responseData = response.body()
                     if (responseData != null) {
-                        // Save updated user info in SharedPreferences
                         val sharedPreferences = getSharedPreferences("RecipeHubSh", Context.MODE_PRIVATE)
                         val editor = sharedPreferences.edit()
                         editor.putString("username", responseData.username)
@@ -157,20 +147,22 @@ class EditProfileScreen : AppCompatActivity() {
                         editor.putString("profilePicture", responseData.profilePicture)
                         editor.apply()
 
-                        // Show success message
                         Toast.makeText(applicationContext, "Profile updated successfully", Toast.LENGTH_SHORT).show()
                     }
                 } else {
                     Toast.makeText(applicationContext, "Failed to update profile", Toast.LENGTH_SHORT).show()
                 }
+                file?.delete() // Delete temporary file after response
             }
 
             override fun onFailure(call: retrofit2.Call<User>, t: Throwable) {
                 showLoading(false)
                 Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
+                file?.delete() // Delete temporary file in case of failure
             }
         })
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
          return when(item.itemId){
