@@ -5,11 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.recipehub.AppInterface.ApiInterface
 import com.example.recipehub.modle.AuthModel
+import com.example.recipehub.modle.MYError
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
@@ -52,6 +54,8 @@ class MainActivity : AppCompatActivity() {
             } else {
                 // Handle the case when either field is empty
                 Toast.makeText(this, "Please fill in both fields", Toast.LENGTH_SHORT).show()
+                val errorView = findViewById<TextView>(R.id.textView3)
+                errorView.text = "Please fill in both fields"
             }
 
 
@@ -90,16 +94,21 @@ class MainActivity : AppCompatActivity() {
 //                        Toast.makeText(applicationContext, actualData.Logintoken, Toast.LENGTH_LONG).show()
                     } else {
                         // Handle the case where the response body is null
-                        Toast.makeText(applicationContext, "Sorry, something went wrong. Please try again later.", Toast.LENGTH_LONG).show()
+                        val errorView = findViewById<TextView>(R.id.textView3)
+                        errorView.text = "Server Not Responding"
                     }
                 }else{
                     // Handle Server other Status Code MYError
                     Toast.makeText(applicationContext,statusCode.toString(),Toast.LENGTH_LONG).show()
+                    val errorView = findViewById<TextView>(R.id.textView3)
+                    errorView.text = "Sorry, something went wrong. Please try again later."
                 }
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Toast.makeText(applicationContext, "MYError: ${t.message}", Toast.LENGTH_LONG).show()
+                val errorView = findViewById<TextView>(R.id.textView3)
+                errorView.text = "Sorry, something went wrong. Please try again later."
             }
         })
     }
@@ -113,8 +122,6 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, HomeScreen::class.java)
             startActivity(intent)
             finish()
-        } else {
-            Log.d("Navigation", "No token found, staying on MainActivity")
         }
     }
 }

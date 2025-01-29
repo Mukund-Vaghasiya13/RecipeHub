@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ReportFragment.Companion.reportFragment
@@ -49,6 +50,8 @@ class SignupScreen : AppCompatActivity() {
             } else {
                 // Handle the case when either field is empty
                 Toast.makeText(this, "Please fill in both fields", Toast.LENGTH_SHORT).show()
+                val errorView = findViewById<TextView>(R.id.textView3)
+                errorView.text = "Please fill in both fields"
             }
         }
     }
@@ -94,15 +97,21 @@ class SignupScreen : AppCompatActivity() {
                     } else {
                         // Handle the case where the response body is null
                         Toast.makeText(applicationContext, "Sorry, something went wrong. Please try again later.", Toast.LENGTH_LONG).show()
+                        val errorView = findViewById<TextView>(R.id.textView3)
+                        errorView.text = "Sorry, something went wrong. Please try again later."
                     }
                 }else{
                     // Handle Server other Status Code MYError
                     Toast.makeText(applicationContext,statusCode.toString(),Toast.LENGTH_LONG).show()
+                    val errorView = findViewById<TextView>(R.id.textView3)
+                    errorView.text = "Server Not Responding."
                 }
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Toast.makeText(applicationContext, "MYError: ${t.message}", Toast.LENGTH_LONG).show()
+                val errorView = findViewById<TextView>(R.id.textView3)
+                errorView.text = "Sorry, something went wrong. Please try again later."
             }
         })
     }

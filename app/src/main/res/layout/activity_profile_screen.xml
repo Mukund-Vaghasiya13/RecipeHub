@@ -20,8 +20,9 @@
             android:id="@+id/profilebar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingTop="10dp"
             app:title="Profile"
-            app:titleTextAppearance="@style/CustomAppBarTitleStyle"/>
+            app:titleTextAppearance="@style/CustomAppBarTitleStyle" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.cardview.widget.CardView

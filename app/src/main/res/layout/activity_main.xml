@@ -20,6 +20,7 @@
             android:id="@+id/appBar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingTop="10dp"
             app:subtitleTextAppearance="@style/TextAppearance.AppCompat.Small"
             app:title="Login"
             app:titleTextAppearance="@style/CustomAppBarTitleStyle" />
@@ -75,7 +76,7 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/Login" />
+                app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/signup"
@@ -131,6 +132,17 @@
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="1dp"
+                android:layout_height="14dp"
+                android:layout_marginTop="24dp"
+                android:text=""
+                android:textColor="@color/red"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Login" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

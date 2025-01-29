@@ -52,6 +52,7 @@ class ProfileScreen : AppCompatActivity() {
         val imageView = findViewById<ImageView>(R.id.imageView3)
         Picasso.get().load(profilePicture).into(imageView)
 
+
         val emailHolder = findViewById<TextView>(R.id.textView2)
         emailHolder.text = email
     }
