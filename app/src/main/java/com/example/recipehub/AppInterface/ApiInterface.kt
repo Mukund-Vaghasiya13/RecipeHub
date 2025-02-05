@@ -1,6 +1,7 @@
 package com.example.recipehub.AppInterface
 
 
+import com.example.recipehub.modle.Recipe
 import com.example.recipehub.modle.User
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -32,4 +33,14 @@ interface ApiInterface {
         @Part("username") username: RequestBody,
         @Part("email") email: RequestBody
     ): Call<User>
+
+    @Multipart
+    @POST("api/v1/Recipe/createRecipes")
+    fun createRecipe(
+        @Header("Authorization") authorization: String,
+        @Part file: MultipartBody.Part?,
+        @Part("title") title:RequestBody,
+        @Part("description") description:RequestBody,
+        @Part("ingredients") ingredients:RequestBody
+    ):Call<Recipe>
 }
