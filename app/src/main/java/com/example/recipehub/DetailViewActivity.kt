@@ -1,6 +1,7 @@
 package com.example.recipehub
 
 import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -17,7 +18,7 @@ class DetailViewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_detail_view)
-
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT
         val toolBar = findViewById<MaterialToolbar>(R.id.detID)
         setSupportActionBar(toolBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

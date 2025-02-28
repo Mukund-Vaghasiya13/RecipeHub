@@ -2,6 +2,7 @@ package com.example.recipehub
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
@@ -55,7 +56,7 @@ class AddRecipeScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_add_recipe_screen)
-
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT
         //MARK:  App Bar
 
         val appbar = findViewById<MaterialToolbar>(R.id.AddRecipeBar)

@@ -3,6 +3,7 @@ package com.example.recipehub
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         checkUserLoginOrNot()
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT
         val toolBarTB: MaterialToolbar = findViewById<MaterialToolbar>(R.id.appBar)
         setSupportActionBar(toolBarTB)
         var signUpButton = findViewById<MaterialButton>(R.id.signup)

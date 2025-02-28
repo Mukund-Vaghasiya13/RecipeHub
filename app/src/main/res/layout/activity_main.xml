@@ -21,7 +21,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="10dp"
-            app:subtitleTextAppearance="@style/TextAppearance.AppCompat.Small"
             app:title="Login"
             app:titleTextAppearance="@style/CustomAppBarTitleStyle" />
     </com.google.android.material.appbar.AppBarLayout>
@@ -48,8 +47,9 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/appicon"
                 tools:ignore="ImageContrastCheck"
-                tools:srcCompat="@tools:sample/avatars" />
+                tools:srcCompat="@drawable/appicon" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/Login"

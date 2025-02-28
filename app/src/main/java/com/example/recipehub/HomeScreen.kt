@@ -2,7 +2,9 @@ package com.example.recipehub
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -10,6 +12,8 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipehub.Adpter.ListRecipeAdapter
@@ -17,6 +21,7 @@ import com.example.recipehub.AppInterface.ApiInterface
 import com.example.recipehub.modle.MYError
 import com.example.recipehub.modle.Recipe
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -38,6 +43,12 @@ class HomeScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_home_screen)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(0, 0, 0, systemBars.bottom) // Add padding for the bottom bar
+            insets
+        }
 
         val homeAppbar = findViewById<MaterialToolbar>(R.id.homebar)
         setSupportActionBar(homeAppbar)
@@ -87,7 +98,15 @@ class HomeScreen : AppCompatActivity() {
                         visibility = View.VISIBLE
                         text = "Error: $message"
 
-                }
+                    }
+                   val a = findViewById<MaterialButton>(R.id.refresh)
+                    a.visibility = View.VISIBLE
+                    a.setOnClickListener {
+                        a.visibility = View.GONE
+                        currentPage = 1
+                        loadRecipes(currentPage)
+                    }
+
             } else if (list != null) {
                 recipes.addAll(list)
                 myAdapter.notifyDataSetChanged()
@@ -154,7 +173,8 @@ class HomeScreen : AppCompatActivity() {
             val myError = Gson().fromJson(jsonString, MYError::class.java)
             myError.technicalDetails
         } catch (e: Exception) {
-            "Unknown Error"
+            Log.e("API_ERROR", "Response: $responseBody")
+            "Failed to parse error response: ${e.message}"
         }
     }
 }

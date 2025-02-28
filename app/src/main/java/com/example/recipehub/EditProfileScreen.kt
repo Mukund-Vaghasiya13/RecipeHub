@@ -2,6 +2,7 @@ package com.example.recipehub
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
@@ -49,6 +50,7 @@ class EditProfileScreen : AppCompatActivity() {
         setContentView(R.layout.activity_edit_profile_screen)
         val editprofilebar = findViewById<MaterialToolbar>(R.id.editprofilebar)
         setSupportActionBar(editprofilebar)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 

@@ -43,4 +43,7 @@ interface ApiInterface {
         @Part("description") description:RequestBody,
         @Part("ingredients") ingredients:RequestBody
     ):Call<Recipe>
+
+    @GET("api/v1/Recipe/list/user")
+    fun ListUserRecipe(@Query("page") page: Int, @Header("Authorization") token: String ):Call<ResponseBody>
 }

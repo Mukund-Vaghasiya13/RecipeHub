@@ -56,14 +56,14 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="536dp"
         android:text="Description:"
-        android:textSize="20dp"
+        android:textSize="27dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <ScrollView
         android:id="@+id/scroll1"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="100dp"
         android:layout_margin="28dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -72,6 +72,7 @@
 
         <TextView
             android:id="@+id/des"
+            android:textSize="20dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="hjshas ahjahd ajhasjdh ahdjadhdadsjhdjadh ahdajhd dhajdhajdshdjdh jh j adhjahd"
@@ -87,13 +88,13 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:text="Ingredients:"
-        android:textSize="20dp"
+        android:textSize="27dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scroll1" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="150dp"
         android:layout_margin="28dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.285"
@@ -103,6 +104,7 @@
 
         <TextView
             android:id="@+id/ing"
+            android:textSize="20dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="hjshas ahjahd ajhasjdh ahdjadhdadsjhdjadh ahdajhd dhajdhajdshdjdh jh j adhjahd"
