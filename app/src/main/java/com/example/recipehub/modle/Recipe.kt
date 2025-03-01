@@ -1,7 +1,7 @@
 package com.example.recipehub.modle
 
 data class Recipe(
-    val id: String?, // MongoDB ObjectId as a String
+    val _id: String?, // MongoDB ObjectId as a String
     val userId: String?, // Reference to the User
     val title: String,
     val image: String?,

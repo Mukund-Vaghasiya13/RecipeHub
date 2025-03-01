@@ -20,6 +20,7 @@ import com.example.recipehub.Adpter.ListRecipeAdapter
 import com.example.recipehub.AppInterface.ApiInterface
 import com.example.recipehub.modle.MYError
 import com.example.recipehub.modle.Recipe
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
@@ -37,6 +38,7 @@ class HomeScreen : AppCompatActivity() {
     private val recipes = mutableListOf<Recipe>()
     private lateinit var myAdapter: ListRecipeAdapter
     private lateinit var progressBar: ProgressBar
+    private lateinit var shimmer:ShimmerFrameLayout;
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +57,7 @@ class HomeScreen : AppCompatActivity() {
         val recycler = findViewById<RecyclerView>(R.id.recycler)
         val errorMessageView = findViewById<TextView>(R.id.error_message)
         progressBar = findViewById(R.id.progressBar)
+        shimmer = findViewById(R.id.shimmer)
 
         myAdapter = ListRecipeAdapter(this, recipes){ recipe ->
             val intent = Intent(applicationContext,DetailViewActivity::class.java)
@@ -86,10 +89,16 @@ class HomeScreen : AppCompatActivity() {
     }
 
     private fun loadRecipes(page: Int) {
-        progressBar.visibility = View.VISIBLE
+        if (page == 1){
+            shimmer.startShimmer()
+        }else{
+            progressBar.visibility = View.VISIBLE
+        }
         isLoading = true
         NetworkCallListRecipe(page) { list, message ->
             progressBar.visibility = View.GONE
+            shimmer.stopShimmer()
+            shimmer.visibility = View.GONE
             isLoading = false
             if (message != null) {
 
@@ -97,7 +106,6 @@ class HomeScreen : AppCompatActivity() {
                     findViewById<TextView>(R.id.error_message).apply {
                         visibility = View.VISIBLE
                         text = "Error: $message"
-
                     }
                    val a = findViewById<MaterialButton>(R.id.refresh)
                     a.visibility = View.VISIBLE
@@ -109,6 +117,8 @@ class HomeScreen : AppCompatActivity() {
 
             } else if (list != null) {
                 recipes.addAll(list)
+                findViewById<RecyclerView>(R.id.recycler).visibility = View.VISIBLE
+                findViewById<TextView>(R.id.error_message).visibility = View.GONE
                 myAdapter.notifyDataSetChanged()
             }
         }

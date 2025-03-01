@@ -24,6 +24,7 @@ import com.example.recipehub.Adpter.GridAdpater
 import com.example.recipehub.AppInterface.ApiInterface
 import com.example.recipehub.modle.MYError
 import com.example.recipehub.modle.Recipe
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
@@ -45,6 +46,7 @@ class ProfileScreen : AppCompatActivity() {
     private lateinit var adapter: GridAdpater
     private val recipeList = mutableListOf<Recipe>()
     private lateinit var progressBar: ProgressBar
+    private lateinit var shimmer:ShimmerFrameLayout
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +59,8 @@ class ProfileScreen : AppCompatActivity() {
         val email = sharedPF.getString("email","Error")
         val profilePicture = sharedPF.getString("profilePicture","https://miro.medium.com/v2/resize:fit:1400/1*MXyMqcEJ6Se0SCWcYCKZTQ.jpeg")
         val username = sharedPF.getString("username","OOPS Server Error!")
+
+        shimmer = findViewById(R.id.gridShimmer)
 
         val profileBar = findViewById<MaterialToolbar>(R.id.profilebar)
         setSupportActionBar(profileBar)
@@ -113,12 +117,19 @@ class ProfileScreen : AppCompatActivity() {
 
     private fun loadRecipes(page: Int) {
         isLoading = true
-        progressBar.visibility = View.VISIBLE
+        if(page == 1){
+            shimmer.startShimmer()
+        }else{
+            progressBar.visibility = View.VISIBLE
+        }
         NetworkCallListRecipe(page) { list, error ->
             isLoading = false
             progressBar.visibility = View.GONE
+            shimmer.stopShimmer()
+            shimmer.visibility = View.GONE
             if (error == null && list != null) {
                 recipeList.addAll(list)
+                findViewById<RecyclerView>(R.id.asGridUser).visibility = View.VISIBLE
                 adapter.notifyDataSetChanged()
             } else {
                 Log.e("API_ERROR", "Error: $error")

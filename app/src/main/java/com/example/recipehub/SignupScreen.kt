@@ -53,7 +53,7 @@ class SignupScreen : AppCompatActivity() {
                 // Handle the case when either field is empty
                 Toast.makeText(this, "Please fill in both fields", Toast.LENGTH_SHORT).show()
                 val errorView = findViewById<TextView>(R.id.textView3)
-                errorView.text = "Please fill in both fields"
+                errorView.text = "Fields are Empety"
             }
         }
     }
