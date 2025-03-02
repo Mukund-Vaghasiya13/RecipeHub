@@ -14,6 +14,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -22,7 +23,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipehub.Adpter.GridAdpater
 import com.example.recipehub.AppInterface.ApiInterface
+import com.example.recipehub.modle.AuthModel
 import com.example.recipehub.modle.MYError
+import com.example.recipehub.modle.Message
 import com.example.recipehub.modle.Recipe
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.appbar.MaterialToolbar
@@ -90,7 +93,9 @@ class ProfileScreen : AppCompatActivity() {
 
         progressBar = findViewById(R.id.progressBar)
         recyclerView = findViewById(R.id.asGridUser)
-        adapter = GridAdpater(this@ProfileScreen, recipeList)
+        adapter = GridAdpater(this@ProfileScreen, recipeList){ id ->
+            deleteRecipe(id)
+        }
         recyclerView.adapter = adapter
         recyclerView.layoutManager = GridLayoutManager(this, 3)
         recyclerView.addItemDecoration(GridSpacingItemDecoration(20))
@@ -211,6 +216,50 @@ class ProfileScreen : AppCompatActivity() {
             "Failed Netwrok Problem"
         }
     }
+
+    private fun deleteRecipe(id:String){
+        val retrofitBuilder = Retrofit.Builder()
+            .baseUrl("https://sharerecipy-backend.onrender.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(ApiInterface::class.java)
+
+        val sharedPF = getSharedPreferences("RecipeHubSh", MODE_PRIVATE)
+        val token = sharedPF.getString("LoginToken", null)
+        val mapdata = mapOf(
+            "_id" to id
+        )
+
+        if(token != null){
+            val  retrodata = retrofitBuilder.DeleteUserRecipe(token,mapdata)
+            retrodata.enqueue(object : Callback<ResponseBody>{
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    val statusCode = response.code()
+                    if(statusCode == 201) {
+                        val responseBody = response.body()
+                        if (responseBody != null) {
+                            val jsonString = responseBody.string()
+                            val actualData = Gson().fromJson(jsonString, Message::class.java)
+                            Toast.makeText(this@ProfileScreen,actualData.message ?: "Delete Record",Toast.LENGTH_LONG).show()
+                        }else{
+                            Toast.makeText(this@ProfileScreen,"Server error ${statusCode} ,Retry 😥",Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Toast.makeText(this@ProfileScreen,"Netwrok Error,Retry 😥",Toast.LENGTH_LONG).show()
+                }
+            })
+        }else{
+            Toast.makeText(this@ProfileScreen,"Netwrok Error,Retry \uD83D\uDE25",Toast.LENGTH_LONG).show()
+        }
+    }
+
+
 }
 
 

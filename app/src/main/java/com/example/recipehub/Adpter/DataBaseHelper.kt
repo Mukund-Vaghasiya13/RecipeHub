@@ -1,5 +1,6 @@
 package com.example.recipehub.Adpter
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
@@ -57,4 +58,32 @@ class DataBaseHelper(val context:Context):SQLiteOpenHelper(context, DATABASE_NAM
         cursor.close()
         return isImposter
     }
+
+    @SuppressLint("Range")
+    fun fetchAll():List<Recipe>{
+        val db = readableDatabase
+        val cursore = db.query(TABLE_NAME, arrayOf(column_ID, column_RID, column_TITLE, column_IMAGE,
+            column_DESCRIPTION, column_INGREDIENTS),null,null,null,null,null)
+        var list = mutableListOf<Recipe>()
+        while(cursore.moveToNext()){
+            val recipe = Recipe(
+                _id = cursore.getString(cursore.getColumnIndex(column_RID)),
+                userId = null,
+                title = cursore.getString(cursore.getColumnIndex(column_TITLE)),
+                image = cursore.getString(cursore.getColumnIndex(column_IMAGE)),
+                description = cursore.getString(cursore.getColumnIndex(column_DESCRIPTION)),
+                ingredients = cursore.getString(cursore.getColumnIndex(column_INGREDIENTS)),
+                createdAt = null,
+                updatedAt = null
+            )
+            list.add(recipe)
+        }
+        return list
+    }
+
+    fun deleteByRid(rid: String): Int {
+        val db = writableDatabase
+        return db.delete(TABLE_NAME, "$column_RID = ?", arrayOf(rid))
+    }
+
 }

@@ -46,4 +46,8 @@ interface ApiInterface {
 
     @GET("api/v1/Recipe/list/user")
     fun ListUserRecipe(@Query("page") page: Int, @Header("Authorization") token: String ):Call<ResponseBody>
+
+
+    @POST("api/v1/Recipe/list/user/delete")
+    fun DeleteUserRecipe(@Header("Authorization") token: String,@Body param:Map<String,String>):Call<ResponseBody>
 }

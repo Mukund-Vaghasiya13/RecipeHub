@@ -16,6 +16,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.recipehub.Adpter.ListRecipeAdapter
 import com.example.recipehub.AppInterface.ApiInterface
 import com.example.recipehub.modle.MYError
@@ -39,6 +40,7 @@ class HomeScreen : AppCompatActivity() {
     private lateinit var myAdapter: ListRecipeAdapter
     private lateinit var progressBar: ProgressBar
     private lateinit var shimmer:ShimmerFrameLayout;
+    private lateinit var refreshSwip:SwipeRefreshLayout;
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,6 +60,9 @@ class HomeScreen : AppCompatActivity() {
         val errorMessageView = findViewById<TextView>(R.id.error_message)
         progressBar = findViewById(R.id.progressBar)
         shimmer = findViewById(R.id.shimmer)
+        refreshSwip = findViewById(R.id.swipeRefresh)
+
+
 
         myAdapter = ListRecipeAdapter(this, recipes){ recipe ->
             val intent = Intent(applicationContext,DetailViewActivity::class.java)
@@ -86,6 +91,13 @@ class HomeScreen : AppCompatActivity() {
                 }
             }
         })
+
+        refreshSwip.setOnRefreshListener {
+            currentPage = 1
+            recipes.clear() // Clear existing recipes
+            myAdapter.notifyDataSetChanged() // Notify adapter about data reset
+            loadRecipes(currentPage) // Reload data
+        }
     }
 
     private fun loadRecipes(page: Int) {
@@ -102,7 +114,7 @@ class HomeScreen : AppCompatActivity() {
             isLoading = false
             if (message != null) {
 
-                    findViewById<RecyclerView>(R.id.recycler).visibility = View.GONE
+                   refreshSwip.visibility = View.GONE
                     findViewById<TextView>(R.id.error_message).apply {
                         visibility = View.VISIBLE
                         text = "Error: $message"
@@ -111,13 +123,16 @@ class HomeScreen : AppCompatActivity() {
                     a.visibility = View.VISIBLE
                     a.setOnClickListener {
                         a.visibility = View.GONE
+                        findViewById<TextView>(R.id.error_message).visibility = View.GONE
+                        shimmer.visibility = View.VISIBLE
                         currentPage = 1
                         loadRecipes(currentPage)
                     }
 
             } else if (list != null) {
+                refreshSwip.isRefreshing = false
                 recipes.addAll(list)
-                findViewById<RecyclerView>(R.id.recycler).visibility = View.VISIBLE
+                refreshSwip.visibility = View.VISIBLE
                 findViewById<TextView>(R.id.error_message).visibility = View.GONE
                 myAdapter.notifyDataSetChanged()
             }
@@ -134,6 +149,11 @@ class HomeScreen : AppCompatActivity() {
         return when (item.itemId) {
             R.id.profile -> {
                 val intent = Intent(applicationContext, ProfileScreen::class.java)
+                startActivity(intent)
+                true
+            }
+            R.id.stuff -> {
+                val intent = Intent(applicationContext, UserSavedStuff::class.java)
                 startActivity(intent)
                 true
             }

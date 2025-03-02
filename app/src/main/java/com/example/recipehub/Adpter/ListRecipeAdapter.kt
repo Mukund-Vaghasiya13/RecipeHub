@@ -44,7 +44,7 @@ class ListRecipeAdapter(val Conent:Activity,val recipes: List<Recipe>,val getRec
         val isit = recipe._id?.let { db.findImposter(it) }
         if(isit == true){
             holder.add.isEnabled = false
-            holder.add.setImageResource(R.drawable.baseline_person_24)
+            holder.add.setImageResource(R.drawable.baseline_bookmark_24)
         }
 
 
@@ -74,7 +74,7 @@ class ListRecipeAdapter(val Conent:Activity,val recipes: List<Recipe>,val getRec
                 Toast.makeText(Conent,"Fail to save try! again 😥",Toast.LENGTH_LONG).show()
             }else{
                 holder.add.isEnabled = false
-                holder.add.setImageResource(R.drawable.baseline_person_24)
+                holder.add.setImageResource(R.drawable.baseline_bookmark_24)
             }
         }
 

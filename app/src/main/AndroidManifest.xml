@@ -15,6 +15,9 @@
         android:theme="@style/Theme.RecipeHub"
         tools:targetApi="31">
         <activity
+            android:name=".UserSavedStuff"
+            android:exported="false" />
+        <activity
             android:name=".DetailViewActivity"
             android:exported="false" />
         <activity
